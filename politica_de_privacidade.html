@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade - Sistema Atalaia</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cor-primaria: #0056b3;
+            --cor-primaria-hover: #004494;
+            --cor-secundaria: #6c757d;
+            --cor-sucesso: #218838;
+            --cor-perigo: #c82333;
+            --cor-fundo-verde: #28a745;
+            --cor-visualizar: #17a2b8; 
+            --cor-container: rgba(255, 255, 255, 0.95);
+            --cor-container-solido: #ffffff;
+            --cor-texto-principal: #333;
+            --cor-texto-secundario: #495057;
+            --cor-texto-container-header: #003366;
+            --cor-texto-invertido: #ffffff;
+            --cor-borda: #dee2e6;
+            --cor-fundo-input: #f8f9fa;
+            --cor-fundo-input-foco: #fff;
+            --toggle-bg: #007bff;
+            --toggle-fg: #FFDE00;
+            --fonte-principal: 'Poppins', sans-serif;
+            --raio-borda-padrao: 8px;
+            --raio-borda-container: 12px;
+            --sombra-padrao: 0 4px 12px rgba(0,0,0,0.08);
+            --sombra-container: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        html.dark-mode {
+            --cor-container: rgba(43, 48, 53, 0.95);
+            --cor-container-solido: #212529;
+            --cor-texto-principal: #f8f9fa;
+            --cor-texto-secundario: #adb5bd;
+            --cor-texto-container-header: #e9ecef;
+            --cor-texto-invertido: #ffffff;
+            --cor-borda: #495057;
+            --cor-fundo-input: #343a40;
+            --cor-fundo-input-foco: #495057;
+            --toggle-bg: #495057;
+            --toggle-fg: #f8f9fa;
+        }
+
+        body {
+            font-family: var(--fonte-principal);
+            color: var(--cor-texto-principal);
+            margin: 0;
+            background-color: #f4f7f6;
+            background-image: url('fundo.png'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--cor-container);
+            padding: 40px;
+            box-shadow: var(--sombra-container);
+            border-radius: var(--raio-borda-container);
+            border: 1px solid var(--cor-borda);
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 20px;
+            gap: 15px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--cor-primaria); /* Dark blue for light mode */
+            text-shadow: 0 0 5px rgba(0, 86, 179, 0.4);
+            transition: all 0.3s ease;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            user-select: none;
+        }
+
+        html.dark-mode .logo-text {
+            color: #4da3ff; /* Readable light blue for dark mode */
+        }
+
+        .logo-text:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(0, 86, 179, 0.6);
+        }
+
+        .theme-toggle-switch {
+            width: 60px;
+            height: 30px;
+            background-color: var(--toggle-bg);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-checkbox {
+            display: none;
+        }
+
+        .theme-toggle-label {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .theme-toggle-inner {
+            width: 26px;
+            height: 26px;
+            background-color: var(--toggle-fg);
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .theme-toggle-icon-sun, .theme-toggle-icon-moon {
+            font-size: 16px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-toggle-icon-sun {
+            left: 6px;
+            opacity: 1;
+            color: #333;
+        }
+
+        .theme-toggle-icon-moon {
+            right: 6px;
+            opacity: 0;
+        }
+
+        .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-inner {
+            transform: translateX(30px);
+        }
+
+        .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-icon-sun {
+            opacity: 0;
+        }
+
+        .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-icon-moon {
+            opacity: 1;
+        }
+
+        h1, h2, h3 {
+            color: var(--cor-texto-container-header);
+            font-weight: 600;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--cor-borda);
+            font-size: 1.5em;
+        }
+
+        h3 {
+            margin-top: 25px;
+            font-size: 1.2em;
+        }
+
+        p, li {
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: var(--cor-texto-principal);
+        }
+
+        ul {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: var(--cor-primaria);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--cor-primaria-hover);
+            text-decoration: underline;
+        }
+
+        blockquote {
+            margin: 0 0 25px 0;
+            padding: 15px 20px;
+            background-color: var(--cor-fundo-input);
+            border-left: 5px solid var(--cor-primaria);
+            border-radius: 0 var(--raio-borda-padrao) var(--raio-borda-padrao) 0;
+            color: var(--cor-texto-secundario);
+            font-style: italic;
+        }
+
+        blockquote p {
+            margin: 0;
+            color: inherit;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--cor-texto-container-header);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+    
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo-text">Sistema Atalaia</div>
+            
+            <div class="theme-toggle-switch">
+                <input type="checkbox" id="theme-toggle-btn" class="theme-toggle-checkbox">
+                <label for="theme-toggle-btn" class="theme-toggle-label">
+                    <span class="theme-toggle-inner"></span>
+                    <span class="theme-toggle-icon-sun">☀️</span>
+                    <span class="theme-toggle-icon-moon">🌙</span>
+                </label>
+            </div>
+        </div>
+
+        <h1>Política de Privacidade</h1>
+
+        <blockquote>
+            <p>Última atualização: 21 de setembro de 2026 · Versão 2.0</p>
+        </blockquote>
+
+        <p>Esta Política de Privacidade explica, de forma clara e transparente, como o aplicativo <strong>Sistema Atalaia</strong> ("Aplicativo") trata dados pessoais: o que coletamos, por que coletamos, com quem compartilhamos, por quanto tempo guardamos e quais são os seus direitos.</p>
+
+        <h2>Resumo</h2>
+        <ul>
+            <li><strong>Sem cadastro obrigatório.</strong> Você ouve as rádios, assiste à TV e navega no portal sem criar conta. O <strong>AtalaiaID</strong> (login com Google ou Apple) é opcional e nós não guardamos senhas.</li>
+            <li><strong>Estatísticas de uso.</strong> Usamos o Google Firebase para saber, de forma parcialmente anonimizada, o que é mais usado no Aplicativo (por exemplo, qual rádio foi ouvida e por quanto tempo) e para corrigir erros.</li>
+            <li><strong>O que não coletamos.</strong> Não acessamos sua localização, contatos, fotos, arquivos, microfone nem câmera, e não enviamos notificações push.</li>
+            <li><strong>Sem venda de dados.</strong> Não vendemos nem alugamos seus dados pessoais, e não os usamos para publicidade personalizada.</li>
+            <li><strong>Conteúdo de terceiros.</strong> O portal de notícias e a TV (YouTube) aparecem dentro do Aplicativo, mas carregam conteúdo de sites e serviços que têm as próprias regras de privacidade.</li>
+            <li><strong>Você no controle.</strong> Você pode pedir acesso, correção ou exclusão dos seus dados a qualquer momento pelo e-mail <a href="mailto:dev@sisatalaia.com.br">dev@sisatalaia.com.br</a>.</li>
+        </ul>
+
+        <h2>1. Quem somos e a quem esta Política se aplica</h2>
+        <p>Esta Política foi elaborada em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018), com o Marco Civil da Internet (Lei nº 12.965/2014) e com as exigências das lojas de aplicativos Google Play e Apple App Store.</p>
+        <p>O Aplicativo é oferecido pelo <strong>Sistema Atalaia de Comunicação</strong>, responsável pelas rádios <strong>Metropolitana FM</strong>, <strong>Novabrasil FM</strong> e <strong>Atalaia 96 FM</strong> e pela <strong>TV Atalaia</strong>, cujos conteúdos são transmitidos no Aplicativo. Para fins da LGPD, o Sistema Atalaia é o <strong>controlador</strong> dos dados pessoais tratados diretamente pelo Aplicativo, ou seja, quem decide como e por que esses dados são tratados.</p>
+        <ul>
+            <li><strong>Canal de privacidade (Encarregado pelo tratamento de dados pessoais):</strong> <a href="mailto:dev@sisatalaia.com.br">dev@sisatalaia.com.br</a></li>
+        </ul>
+        <p>Esta Política se aplica ao uso do Aplicativo nos sistemas Android e iOS, incluindo as integrações com o <strong>Android Auto</strong> e o <strong>Apple CarPlay</strong>. Ela <strong>não</strong> se aplica a sites, aplicativos e serviços de terceiros acessados por meio do Aplicativo (como o portal de notícias, o YouTube, redes sociais e o site de cada emissora): cada um deles tem a sua própria política (veja a seção 11).</p>
+
+        <h2>2. Dados que coletamos</h2>
+        <p>Coletamos o mínimo necessário para o Aplicativo funcionar e evoluir. Os dados se dividem em quatro grupos.</p>
+
+        <h3>2.1 Coletados automaticamente</h3>
+        <p><strong>Eventos de uso (Google Firebase Analytics).</strong> Estes são os eventos que o próprio Aplicativo registra:</p>
+        <ul>
+            <li>início da reprodução de uma rádio (nome da emissora);</li>
+            <li>duração de cada sessão de escuta, em segundos (só é registrada quando dura mais de 5 segundos);</li>
+            <li>abertura das abas Home (portal) e Televisão;</li>
+            <li>erros de reprodução ou de carregamento (emissora ou tela e a mensagem técnica do erro);</li>
+            <li>entrada ou saída do AtalaiaID (apenas o método usado: Google ou Apple).</li>
+        </ul>
+        <p>Esses eventos não incluem seu nome, e-mail ou identificador de conta e não são vinculados ao seu AtalaiaID.</p>
+
+        <p><strong>Outros dados gerados automaticamente.</strong> Além desses eventos, o SDK do Firebase e as conexões de rede geram os dados abaixo:</p>
+        <ul>
+            <li><strong>Dados técnicos do aparelho e da instalação (SDK do Firebase):</strong> modelo e fabricante do aparelho, versão do sistema operacional e do Aplicativo, idioma, país e região aproximados, identificador exclusivo da instalação do Aplicativo (ID de instância do app), data da primeira abertura, informações de sessão e tempo de uso e eventos automáticos do próprio Firebase (como primeira abertura, início de sessão e atualização do Aplicativo).</li>
+            <li><strong>Identificadores de publicidade e de origem da instalação:</strong> no Android, o SDK do Firebase pode ler o <strong>identificador de publicidade</strong> do aparelho (quando disponível) e as informações de origem da instalação fornecidas pelo Google Play (<em>Install Referrer</em>), para medir e atribuir instalações. No iOS, pode usar o <strong>identificador do fornecedor (IDFV)</strong>. O Aplicativo <strong>não</strong> solicita a permissão de rastreamento do iOS (App Tracking Transparency) e <strong>não</strong> usa esses identificadores para exibir anúncios personalizados nem para acompanhar você em outros aplicativos e sites.</li>
+            <li><strong>Endereço IP e dados de conexão:</strong> como em qualquer serviço na internet, os servidores com os quais o Aplicativo se comunica (transmissões de áudio, Google, Apple, YouTube e portal) recebem o endereço IP do aparelho e informações técnicas da conexão. De acordo com a documentação do Google, o endereço IP é usado apenas para estimar a localização aproximada (país e cidade) e não é armazenado nos relatórios do Google Analytics.</li>
+            <li><strong>Configurações remotas (Firebase Remote Config):</strong> ao abrir o Aplicativo, ele consulta os servidores do Google para obter configurações como os endereços das transmissões, do portal e do canal de TV. Nessa consulta, o Google recebe o identificador de instalação e dados técnicos da conexão.</li>
+        </ul>
+
+        <h3>2.2 Fornecidos por você: AtalaiaID (opcional)</h3>
+        <p>Se você optar por entrar no AtalaiaID, recebemos do provedor escolhido:</p>
+        <ul>
+            <li><strong>Login com Google:</strong> nome, endereço de e-mail, foto de perfil e identificador da conta Google.</li>
+            <li><strong>Login com Apple (somente iOS):</strong> nome (apenas na primeira autorização, se você permitir), e-mail (o real ou o endereço privado "Ocultar meu e-mail" da Apple) e identificador Apple.</li>
+            <li><strong>Registros de conta do Firebase Authentication:</strong> identificador interno da conta (UID), provedor usado, data de criação da conta e data do último acesso.</li>
+        </ul>
+        <p>O AtalaiaID <strong>não tem senha própria</strong>: a autenticação acontece diretamente no Google ou na Apple, e nós nunca temos acesso à sua senha. Sua foto de perfil é carregada diretamente do servidor do provedor para ser exibida no Aplicativo.</p>
+
+        <h3>2.3 Guardados apenas no seu aparelho</h3>
+        <ul>
+            <li>A última posição do volume usada no Aplicativo.</li>
+            <li>Cache de imagens (capas de músicas, logotipos e miniaturas) e das fontes de texto, para economizar dados e acelerar o carregamento.</li>
+            <li>Dados de navegação do navegador embutido nas abas Home e Televisão (cookies, cache e armazenamento local), gerenciados pelo sistema.</li>
+            <li>A sessão do AtalaiaID, mantida pelo Firebase Authentication até você sair da conta.</li>
+            <li>O histórico das últimas músicas (até 20) e o tempo restante do Sleep Timer ficam apenas na memória enquanto o Aplicativo está aberto: não são gravados nem enviados.</li>
+        </ul>
+
+        <h3>2.4 Que não coletamos</h3>
+        <p>O Aplicativo <strong>não</strong> coleta nem solicita acesso a: localização (GPS ou aproximada), contatos, agenda, fotos, vídeos ou arquivos, microfone, câmera, SMS ou registro de chamadas, dados de saúde, dados financeiros ou de pagamento, biometria e demais <strong>dados pessoais sensíveis</strong> (art. 5º, II, da LGPD). Também não enviamos notificações push e não tomamos decisões automatizadas que produzam efeitos jurídicos sobre você.</p>
+
+        <h2>3. Como cada funcionalidade usa dados</h2>
+        
+        <h3>3.1 Rádios (reprodução de áudio)</h3>
+        <p>Ao tocar uma rádio, seu aparelho se conecta ao servidor de transmissão da emissora para receber o áudio (atualmente, os servidores ice.fabricahost.com.br, playerservices.streamtheworld.com e play.wisestream.io, que podem ser alterados a qualquer momento por meio das configurações remotas). Esses servidores recebem seu endereço IP e dados técnicos da conexão, o que é indispensável para entregar o áudio.</p>
+        <p>O Aplicativo pode se conectar a transmissões que usem HTTP (sem criptografia), algo comum em rádio online; nessas conexões trafegam apenas o áudio e dados técnicos da conexão, nunca dados da sua conta. Enquanto o áudio toca, registramos no Firebase Analytics o início da reprodução e a duração da sessão de escuta (seção 2.1), e mantemos um serviço de áudio em primeiro plano para que a rádio continue tocando com a tela apagada ou com o Aplicativo em segundo plano.</p>
+
+        <h3>3.2 Música em exibição e capa do álbum</h3>
+        <p>Muitas transmissões informam o título da música que está tocando. O Aplicativo exibe esse título, guarda as últimas músicas na memória e envia <strong>somente o título da música</strong> ao serviço público de busca do iTunes (Apple) para obter a capa. Essa consulta não contém seu nome, e-mail ou identificador de conta, mas a Apple recebe o endereço IP do aparelho, como em qualquer requisição na internet.</p>
+
+        <h3>3.3 Tela de bloqueio, notificação de mídia, Android Auto e Apple CarPlay</h3>
+        <p>O Aplicativo informa ao sistema o nome da emissora, a música e a capa para que sejam exibidos na tela de bloqueio, na notificação de mídia e no painel do veículo compatível com Android Auto ou CarPlay. A notificação de mídia é um controle local de reprodução, não uma notificação push. Esses recursos são operados pelo Google, pela Apple e pelo fabricante do veículo, conforme as políticas de cada um. O Aplicativo <strong>não recebe nem coleta dados do veículo</strong>, como localização, velocidade ou trajetos.</p>
+
+        <h3>3.4 Aba Home (portal de notícias)</h3>
+        <p>A aba Home exibe o portal de notícias em um navegador embutido no Aplicativo. O endereço do portal pode ser atualizado por configuração remota (atualmente, a8se.com). O portal é um site com conteúdo, cookies, ferramentas de análise e anúncios próprios ou de terceiros, que podem coletar dados sobre a sua navegação conforme as regras do próprio site. O Aplicativo não acessa nem registra o que você lê ou digita no portal; apenas registra que a aba foi aberta e eventuais erros de carregamento (seção 2.1).</p>
+
+        <h3>3.5 Aba Televisão (YouTube)</h3>
+        <p>Ao abrir a aba Televisão, o Aplicativo consulta páginas públicas do canal da TV Atalaia no YouTube para identificar a transmissão ao vivo atual e as últimas transmissões (títulos e miniaturas). O player do YouTube só é carregado quando você toca em reproduzir. A partir daí, o YouTube (Google) pode coletar dados como endereço IP, informações do aparelho, cookies e dados de reprodução, conforme a política de privacidade do Google e os Termos de Serviço do YouTube.</p>
+
+        <h3>3.6 AtalaiaID</h3>
+        <p>Atualmente, os dados do AtalaiaID servem para identificar você no Aplicativo (exibindo seu nome, foto e e-mail) e para manter sua sessão ativa. Novos recursos vinculados à conta poderão ser lançados; se isso exigir novos tratamentos de dados, atualizaremos esta Política e, quando necessário, pediremos o seu consentimento.</p>
+
+        <h3>3.7 Verificação de atualizações</h3>
+        <p>Ao iniciar, o Aplicativo consulta a página do app na Google Play ou na App Store para verificar se existe uma versão mais recente e, se houver, exibe um aviso de atualização. Essa consulta parte do seu aparelho diretamente para a loja, que recebe o endereço IP e dados técnicos da conexão.</p>
+
+        <h3>3.8 Compartilhar o Aplicativo</h3>
+        <p>Ao usar "Compartilhar App", o Aplicativo abre o menu de compartilhamento do sistema com uma mensagem padrão e os links das lojas. Nós não recebemos nenhuma informação sobre com quem, ou por onde, você compartilhou.</p>
+
+        <h3>3.9 Fontes de texto</h3>
+        <p>O Aplicativo usa a fonte Outfit, baixada dos servidores do Google Fonts (fonts.gstatic.com) na primeira utilização e guardada no aparelho. Nessa requisição, o Google recebe o endereço IP do aparelho.</p>
+
+        <h3>3.10 Contato com as emissoras</h3>
+        <p>Os botões de WhatsApp, Instagram e site abrem aplicativos ou páginas externas. Se você falar com uma emissora por esses canais, ela receberá os dados que você enviar (como número de telefone, nome de perfil e mensagem) e os usará para atender ao seu contato, sujeita também às políticas de cada plataforma.</p>
+
+        <h2>4. Para que usamos os dados e em quais bases legais</h2>
+        <ul>
+            <li><strong>Fornecer as funcionalidades do Aplicativo</strong> (tocar rádios, exibir portal e TV, mostrar música e capa, integrar com tela de bloqueio, Android Auto e CarPlay, Sleep Timer). Dados: conexão, volume e metadados das músicas. Base legal: execução do serviço que você solicitou (art. 7º, V, da LGPD).</li>
+            <li><strong>Estatísticas de audiência e melhoria do Aplicativo</strong> (entender quais rádios e telas são mais usadas, medir o tempo de escuta e planejar melhorias). Dados: eventos de uso e dados técnicos pseudonimizados. Base legal: legítimo interesse (art. 7º, IX), avaliado para não prevalecer sobre os seus direitos e liberdades.</li>
+            <li><strong>Diagnóstico, estabilidade e segurança</strong> (identificar erros, falhas de transmissão e abusos). Dados: eventos de erro e dados técnicos. Base legal: legítimo interesse (art. 7º, IX).</li>
+            <li><strong>Criar e manter o AtalaiaID.</strong> Dados: nome, e-mail, foto e identificadores da conta. Base legal: seu consentimento (art. 7º, I), manifestado ao escolher entrar com Google ou Apple, e que pode ser revogado a qualquer momento (seção 9).</li>
+            <li><strong>Atender pedidos e mensagens.</strong> Dados: e-mail e o conteúdo da mensagem. Base legal: cumprimento de obrigação legal (art. 7º, II), nos pedidos de direitos do titular, e legítimo interesse (art. 7º, IX), nos demais atendimentos.</li>
+            <li><strong>Cumprir obrigações legais e exercer direitos</strong> (responder a autoridades e defender-nos em processos). Base legal: art. 7º, II e VI.</li>
+        </ul>
+        <p>Não usamos seus dados para vendê-los, para publicidade personalizada, para criar perfis destinados a terceiros nem para decisões automatizadas com efeitos jurídicos.</p>
+
+        <h2>5. Com quem compartilhamos os dados</h2>
+        <p>Não vendemos nem alugamos dados pessoais. Compartilhamos dados apenas quando necessário para o funcionamento do Aplicativo, com os prestadores de serviço e serviços de terceiros listados abaixo, ou quando a lei exigir.</p>
+        <ul>
+            <li><strong>Google</strong> (Firebase Analytics, Remote Config, Authentication e Installations; Google Sign-In; Google Fonts; YouTube): processa os dados descritos nas seções 2 e 3. Veja a <a href="https://policies.google.com/privacy" target="_blank">Política de Privacidade do Google</a> e a <a href="https://firebase.google.com/support/privacy" target="_blank">Privacidade e Segurança no Firebase</a>.</li>
+            <li><strong>Apple</strong> (Login com a Apple, busca do iTunes, App Store e CarPlay): veja a <a href="https://www.apple.com/legal/privacy/pt-br/" target="_blank">Política de Privacidade da Apple</a>.</li>
+            <li><strong>Provedores de transmissão de áudio das emissoras:</strong> recebem o endereço IP e dados técnicos da conexão para entregar o áudio (seção 3.1).</li>
+            <li><strong>Portal de notícias, YouTube e sites das emissoras:</strong> como conteúdos de terceiros, seguem as próprias políticas (seções 3.4, 3.5 e 11).</li>
+            <li><strong>Lojas de aplicativos (Google Play e App Store):</strong> distribuem o Aplicativo e podem nos fornecer estatísticas agregadas, como downloads e falhas, conforme as políticas de cada loja.</li>
+            <li><strong>Autoridades públicas:</strong> quando houver obrigação legal, ordem judicial ou requisição de autoridade competente.</li>
+            <li><strong>Reorganizações societárias:</strong> em caso de fusão, aquisição ou reestruturação, os dados poderão ser transferidos ao sucessor, que deverá respeitar esta Política.</li>
+        </ul>
+
+        <h2>6. Transferência internacional de dados</h2>
+        <p>Os serviços do Google e da Apple podem processar e armazenar dados em servidores localizados fora do Brasil, inclusive nos Estados Unidos. Nesses casos, a transferência ocorre com base nos mecanismos previstos no art. 33 da LGPD, como cláusulas contratuais e programas de conformidade adotados por esses provedores, conforme divulgam em suas próprias políticas, para manter um nível de proteção compatível com o exigido pela lei brasileira.</p>
+
+        <h2>7. Por quanto tempo guardamos os dados</h2>
+        <ul>
+            <li><strong>Estatísticas de uso (Firebase Analytics):</strong> no máximo 14 meses, conforme a retenção configurada no Firebase; depois são excluídas automaticamente.</li>
+            <li><strong>Identificador de instalação e configurações remotas:</strong> enquanto o Aplicativo estiver instalado e em uso; o Google exclui identificadores de instalações inativas por longos períodos.</li>
+            <li><strong>Dados do AtalaiaID:</strong> enquanto sua conta existir ou até você pedir a exclusão (seção 9).</li>
+            <li><strong>Mensagens enviadas por e-mail:</strong> pelo tempo necessário ao atendimento e ao cumprimento de prazos legais.</li>
+            <li><strong>Dados no aparelho:</strong> até você limpar os dados do Aplicativo, sair da conta ou desinstalar.</li>
+        </ul>
+        <p>Encerrado o prazo ou a finalidade, os dados são eliminados ou anonimizados, salvo quando a lei permitir ou exigir a guarda (art. 16 da LGPD), por exemplo para cumprir obrigação legal ou exercer direitos em processos.</p>
+
+        <h2>8. Seus direitos como titular</h2>
+        <p>Conforme o art. 18 da LGPD, você pode solicitar, a qualquer momento e gratuitamente:</p>
+        <ul>
+            <li>a confirmação de que tratamos seus dados pessoais;</li>
+            <li>o acesso aos seus dados;</li>
+            <li>a correção de dados incompletos, inexatos ou desatualizados;</li>
+            <li>a anonimização, o bloqueio ou a eliminação de dados desnecessários, excessivos ou tratados em desconformidade com a lei;</li>
+            <li>a portabilidade dos seus dados a outro fornecedor, mediante requisição expressa;</li>
+            <li>a eliminação dos dados tratados com o seu consentimento;</li>
+            <li>informações sobre as entidades com as quais compartilhamos seus dados;</li>
+            <li>informações sobre a possibilidade de não fornecer consentimento e as consequências da recusa;</li>
+            <li>a revogação do consentimento;</li>
+            <li>a oposição a tratamentos realizados sem consentimento, quando houver descumprimento da lei.</li>
+        </ul>
+        <p><strong>Como pedir:</strong> envie um e-mail para <a href="mailto:dev@sisatalaia.com.br">dev@sisatalaia.com.br</a> com o assunto "Privacidade – seu pedido". Para proteger você, poderemos pedir informações que confirmem sua identidade (por exemplo, que o pedido parta do e-mail vinculado ao seu AtalaiaID). Responderemos em até 15 dias.</p>
+        <p>Como as estatísticas de uso são pseudonimizadas e não contêm seu nome ou e-mail, talvez não seja possível vinculá-las a você; nesse caso, explicaremos o motivo. Se você entender que seus direitos não foram atendidos, pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (<a href="https://www.gov.br/anpd/pt-br" target="_blank">ANPD</a>).</p>
+
+        <h2>9. Como gerenciar seus dados</h2>
+        <ul>
+            <li><strong>Sair do AtalaiaID:</strong> toque no botão do AtalaiaID, no canto superior direito do Aplicativo, e escolha <strong>Sair</strong>.</li>
+            <li><strong>Excluir sua conta e seus dados do AtalaiaID:</strong> envie um e-mail para <a href="mailto:dev@sisatalaia.com.br">dev@sisatalaia.com.br</a>, a partir do endereço vinculado à conta. Excluiremos a conta e os dados associados a ela no Firebase Authentication com a maior brevidade possível e, em regra, em até 15 dias, salvo obrigação legal em contrário. Revogar o acesso do Aplicativo nas configurações da sua conta <a href="https://myaccount.google.com/permissions" target="_blank">Google</a> ou Apple interrompe novos logins, mas não apaga o registro da conta: para isso, peça a exclusão.</li>
+            <li><strong>Limitar identificadores de publicidade:</strong> você pode redefinir ou excluir o identificador de publicidade do aparelho nas configurações de privacidade e anúncios do sistema, e recusar o rastreamento no iOS.</li>
+            <li><strong>Apagar dados locais:</strong> limpe os dados ou o armazenamento do Aplicativo nas configurações do sistema, ou desinstale-o. Isso remove o cache e as preferências guardadas no aparelho.</li>
+            <li><strong>Estatísticas de uso:</strong> neste momento, o Aplicativo não oferece uma opção interna para desativá-las. Você pode pedir a oposição ao tratamento por e-mail (seção 8) ou deixar de usar o Aplicativo.</li>
+        </ul>
+
+        <h2>10. Cookies e tecnologias semelhantes</h2>
+        <p>O Aplicativo não usa cookies próprios, pixels de rastreamento nem SDKs de publicidade. Ele usa identificadores de instalação (Firebase) para as estatísticas descritas na seção 2.1. Já o navegador embutido nas abas Home e Televisão pode gravar cookies, cache e armazenamento local definidos pelo portal e pelo YouTube (por exemplo, para lembrar preferências, medir audiência ou exibir anúncios). Você pode remover esses dados limpando os dados do Aplicativo (seção 9).</p>
+
+        <h2>11. Links e serviços de terceiros</h2>
+        <p>O Aplicativo contém links para serviços de terceiros, como WhatsApp, Instagram, YouTube, o portal de notícias e os sites das emissoras. Ao abri-los, você passa a estar sujeito às políticas de privacidade e aos termos desses serviços, sobre os quais não temos controle. Recomendamos que você os leia. Cada emissora também pode ter política de privacidade própria em seu site.</p>
+
+        <h2>12. Permissões do Aplicativo</h2>
+        <p>No <strong>Android</strong>, o Aplicativo declara as seguintes permissões:</p>
+        <ul>
+            <li><strong>Acesso à internet e ao estado da rede:</strong> receber as transmissões, carregar conteúdos e detectar quando você está sem conexão.</li>
+            <li><strong>Manter o aparelho ativo e serviço em primeiro plano de mídia:</strong> manter o áudio tocando com a tela apagada ou em segundo plano.</li>
+            <li><strong>Identificador de publicidade e informações de instalação:</strong> exigidas pelo SDK do Firebase Analytics para as medições descritas na seção 2.1.</li>
+        </ul>
+        <p>No <strong>iOS</strong>, o Aplicativo usa o modo de execução em segundo plano para áudio, o recurso de áudio do Apple CarPlay e o Login com a Apple.</p>
+        <p>Nenhuma dessas permissões dá ao Aplicativo acesso à sua localização, contatos, fotos, arquivos, microfone ou câmera.</p>
+
+        <h2>13. Segurança</h2>
+        <p>Adotamos medidas técnicas e administrativas razoáveis para proteger seus dados contra acessos não autorizados, perda, alteração ou divulgação indevida, como: comunicação criptografada (HTTPS/TLS) com os serviços do Google e da Apple; autenticação delegada ao Google e à Apple, sem armazenamento de senhas; coleta mínima de dados e pseudonimização das estatísticas; e restrição do acesso interno aos dados a pessoas autorizadas.</p>
+        <p>Nenhum sistema é totalmente imune a falhas. Se ocorrer um incidente de segurança que possa acarretar risco ou dano relevante, comunicaremos você e a ANPD nos termos do art. 48 da LGPD. Você também pode ajudar: mantenha o sistema do aparelho e o Aplicativo atualizados e proteja sua conta Google ou Apple com verificação em duas etapas.</p>
+
+        <h2>14. Crianças e adolescentes</h2>
+        <p>O Aplicativo é de uso geral e não é direcionado a crianças (menores de 12 anos); não coletamos intencionalmente dados pessoais delas. O AtalaiaID depende de contas Google ou Apple, que têm regras próprias de idade mínima. Adolescentes devem usar o AtalaiaID com o conhecimento e o acompanhamento dos pais ou responsáveis, e o tratamento dos dados deles sempre observará o seu melhor interesse (art. 14 da LGPD). Se você é responsável por um menor e acredita que ele nos forneceu dados, escreva para o canal de privacidade para que possamos excluí-los.</p>
+
+        <h2>15. Alterações desta Política</h2>
+        <p>Podemos atualizar esta Política para refletir mudanças no Aplicativo, em serviços de terceiros ou na legislação. A data e a versão no topo indicam a revisão em vigor. Alterações relevantes serão destacadas no Aplicativo e/ou nas lojas; se a mudança exigir um novo consentimento seu, nós o solicitaremos.</p>
+        <ul>
+            <li><strong>Versão 2.0 (21/09/2026):</strong> revisão completa, com detalhamento das coletas, dos terceiros, do AtalaiaID e dos direitos do titular.</li>
+            <li><strong>Versão 1.0:</strong> primeira publicação.</li>
+        </ul>
+
+        <h2>16. Legislação aplicável e contato</h2>
+        <p>Esta Política é regida pelas leis da República Federativa do Brasil, em especial a LGPD e o Marco Civil da Internet.</p>
+        <p>Para dúvidas, solicitações ou reclamações sobre privacidade, fale com o nosso canal de privacidade (Encarregado): <a href="mailto:dev@sisatalaia.com.br">dev@sisatalaia.com.br</a>.</p>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Particle Canvas logic
+            const canvas = document.getElementById('particle-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                let particlesArray;
+
+                class Particle {
+                    constructor(x, y, directionX, directionY, size, color) {
+                        this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY;
+                        this.size = size; this.color = color;
+                    }
+                    draw() {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                        ctx.fillStyle = this.color;
+                        ctx.fill();
+                    }
+                    update() {
+                        if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                        if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                        this.x += this.directionX; this.y += this.directionY;
+                        this.draw();
+                    }
+                }
+
+                function init() {
+                    particlesArray = [];
+                    let numberOfParticles = (canvas.height * canvas.width) / 9000;
+                    for (let i = 0; i < numberOfParticles; i++) {
+                        let size = (Math.random() * 2) + 1;
+                        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                        let directionX = (Math.random() * .4) - .2;
+                        let directionY = (Math.random() * .4) - .2;
+                        let color = 'rgba(0, 191, 255, 0.5)';
+                        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                    }
+                }
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    ctx.clearRect(0,0,innerWidth, innerHeight);
+                    for (let i = 0; i < particlesArray.length; i++) {
+                        particlesArray[i].update();
+                    }
+                }
+
+                window.addEventListener('resize', () => {
+                    canvas.width = innerWidth;
+                    canvas.height = innerHeight;
+                    init();
+                });
+
+                init();
+                animate();
+            }
+
+            // Theme toggle logic
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const docElement = document.documentElement;
+
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    docElement.classList.add('dark-mode');
+                    if(themeToggleBtn) themeToggleBtn.checked = true;
+                } else {
+                    docElement.classList.remove('dark-mode');
+                    if(themeToggleBtn) themeToggleBtn.checked = false;
+                }
+            };
+
+            if (docElement.classList.contains('dark-mode')) {
+                if(themeToggleBtn) themeToggleBtn.checked = true;
+            } else {
+                if(themeToggleBtn) themeToggleBtn.checked = false;
+            }
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('change', () => {
+                    const newTheme = themeToggleBtn.checked ? 'dark' : 'light';
+                    localStorage.setItem('theme', newTheme);
+                    applyTheme(newTheme);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
